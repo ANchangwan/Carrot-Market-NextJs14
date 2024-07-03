@@ -1,18 +1,18 @@
 export default function Home() {
   return (
-    <main className="bg-gray-100 sm:bg-red-500 h-screen flex items-center justify-center p-5">
-      <div className="bg-white w-full shadow-lg p-5 rounded-3xl max-w-screen-sm dark:bg-gray-500 flex flex-col md:flex-row md:items-center gap-2">
+    <main className="bg-gray-100 sm:bg-red-100 md:bg-green-100 lg:bg-cyan-100 xl:bg-orange-100 2xl:bg-purple-100 h-screen flex items-center justify-center p-5">
+      <div className="bg-white shadow-lg p-5 rounded-3xl w-full max-w-screen-sm flex flex-col md:flex-row gap-2">
         <input
-          className="w-full rounded-full p-4 h-12 hover:bg-gray-200 placeholder:bg-white outline-none ring ring-orange-500 ring-offset-2 ring-transparent focus:ring-offset-2 peer focus:ring-green-400  transition-shadow invalid:focus:ring-red-400 "
+          className="w-full rounded-full h-10 bg-gray-200 pl-5 outline-none ring ring-transparent focus:ring-green-500 focus:ring-offset-2 transition-shadow placeholder:drop-shadow invalid:focus:ring-red-500 peer"
           type="email"
           required
-          placeholder="Search Hear..."
+          placeholder="Email address"
         />
-        <span className="text-red-500 font-medium hidden peer-invalid:block">
-          email is requeired
+        <span className="text-red-500 font-medium hidden peer-invalid:block ">
+          Email is required.
         </span>
-        <button className="bg-opacity-50 md:p-5 bg-black text-white py-2 rounded-full focus:scale-90 active:scale-90 transition-transform font-medium outline-none bg-gradient-to-tr from-cyan-500 to-purple-500 peer-required:bg-green-400">
-          Search
+        <button className="text-white py-2 rounded-full active:scale-90  transition-transform peer-invalid:bg-green-400 font-medium outline-none md:px-10 bg-black ">
+          Log in
         </button>
       </div>
     </main>
