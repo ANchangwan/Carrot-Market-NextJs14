@@ -6,9 +6,9 @@ const config: Config = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  theme: {},
-  plugins: [
-    requ
-  ],
+  theme: {
+    
+  },
+  plugins: [],
 };
 export default config;
