@@ -1,6 +1,12 @@
 "use server";
 import { z } from "zod";
 
+const passwordRegex = new RegExp(
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*?[#?!@$%^&*-]).+$/
+);
+
+const checkpotato = (username: string) => !username.includes("potato");
+
 const checkPassword = ({
   password,
   confirmPassword,
@@ -18,16 +24,23 @@ const formSchema = z
       })
       .min(3, "너무 짧아요!!")
       .max(10, "너무 길어요!!")
-      .refine((username) => false, "this is custom"),
+      .toLowerCase()
+      .trim()
+      .transform((username) => `✅${username}`)
+      .refine(checkpotato, "this is custom"),
     email: z
       .string({
         invalid_type_error: "이메일을 입력해주세요",
       })
+      .toLowerCase()
       .email({
         message: "유효한 이메일을 입력해주세요!!!",
       }),
-    password: z.string().min(10, "10자 이상을 입력해주세요"),
-    confirmPassword: z.string().min(10, "10자 이상을 입력해주세요"),
+    password: z
+      .string()
+      .regex(passwordRegex, "소문자 대문자 ")
+      .min(4, "10자 이상을 입력해주세요"),
+    confirmPassword: z.string().min(4, "10자 이상을 입력해주세요"),
   })
   .refine(checkPassword, {
     message: "패스워드가 서로 다릅니다!!",
@@ -44,5 +57,7 @@ export async function createAccount(prevState: any, formData: FormData) {
   const result = formSchema.safeParse(data);
   if (!result.success) {
     return result.error.flatten();
+  } else {
+    console.log(result.data);
   }
 }
