@@ -1,10 +1,32 @@
 "use server";
 
-import { redirect } from "next/navigation";
+import {
+  PASSWORD_MIN_LEGTH,
+  PASSWORD_REGEX,
+  PASSWORD_REGEX_ERROR,
+} from "@/lib/constants";
+import { z } from "zod";
 
-export async function onSubmit(prevState: any, data: FormData) {
-  await new Promise((response) => setTimeout(response, 4000));
-  return {
-    errors: ["wrong password", "password to short"],
+const formSchema = z.object({
+  email: z.string().email().toLowerCase(),
+  password: z
+    .string({
+      required_error: "패스워드가 필요합니다!!",
+    })
+    .min(PASSWORD_MIN_LEGTH)
+    .regex(PASSWORD_REGEX, PASSWORD_REGEX_ERROR),
+});
+
+export async function login(prevState: any, FormData: FormData) {
+  const data = {
+    email: FormData.get("email"),
+    password: FormData.get("password"),
   };
+  const result = formSchema.safeParse(data);
+  if (!result.success) {
+    console.log(result.error.flatten());
+    return result.error.flatten();
+  } else {
+    console.log(result.data);
+  }
 }
