@@ -3,14 +3,17 @@ import { PrismaClient } from "@prisma/client";
 const db = new PrismaClient();
 
 async function test() {
-  const user = await db.user.findMany({
-    where: {
-      username: {
-        contains: "est",
+  const token = await db.sMSToken.create({
+    data: {
+      token: "121212121",
+      user: {
+        connect: {
+          id: 1,
+        },
       },
     },
   });
-  console.log(user);
+  console.log(token);
 }
 test();
 
