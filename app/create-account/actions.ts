@@ -7,6 +7,9 @@ import {
 import db from "@/lib/db";
 import { z } from "zod";
 import bcrypt from "bcrypt";
+import { getIronSession } from "iron-session";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 const checkpotato = (username: string) => !username.includes("potato");
 
@@ -81,6 +84,7 @@ export async function createAccount(prevState: any, formData: FormData) {
     password: formData.get("password"),
     confirmPassword: formData.get("confirmPassword"),
   };
+  console.log(cookies());
   const result = await formSchema.safeParseAsync(data);
   if (!result.success) {
     return result.error.flatten();
@@ -96,6 +100,14 @@ export async function createAccount(prevState: any, formData: FormData) {
         id: true,
       },
     });
-    console.log(user);
+    const session = await getIronSession(cookies(), {
+      cookieName: "delicious-carrot",
+      password: process.env.COOKIE_PASSWORD!,
+    });
+    //@ts-ignore
+    session.id = user.id;
+    await session.save();
+
+    redirect("/profile");
   }
 }
