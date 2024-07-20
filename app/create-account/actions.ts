@@ -54,8 +54,7 @@ const formSchema = z
       .toLowerCase()
       .trim()
       // .transform((username) => `✅${username}`)
-      .refine(checkpotato, "this is custom")
-      .refine(checkUniqueUsername, "유저가 이미 존재합니다!"),
+      .refine(checkpotato, "this is custom"),
     email: z
       .string({
         invalid_type_error: "이메일을 입력해주세요",
@@ -63,8 +62,7 @@ const formSchema = z
       .toLowerCase()
       .email({
         message: "유효한 이메일을 입력해주세요!!!",
-      })
-      .refine(checkUniqueEmail, "이미 존재하는 이메일주소입니다!!"),
+      }),
     password: z
       .string()
       // .regex(PASSWORD_REGEX, PASSWORD_REGEX_ERROR)
@@ -74,6 +72,25 @@ const formSchema = z
   .refine(checkPassword, {
     message: "패스워드가 서로 다릅니다!!",
     path: ["confirmPassword"],
+  })
+  .superRefine(async ({ username }, ctx) => {
+    const user = await db.user.findUnique({
+      where: {
+        username,
+      },
+      select: {
+        id: true,
+      },
+    });
+    if (user) {
+      ctx.addIssue({
+        code: "custom",
+        message: "이미 존재하는 유저입니다",
+        path: ["username"],
+        fatal: true,
+      });
+      return z.NEVER;
+    }
   });
 
 export async function createAccount(prevState: any, formData: FormData) {
@@ -86,6 +103,7 @@ export async function createAccount(prevState: any, formData: FormData) {
   const result = await formSchema.spa(data);
 
   if (!result.success) {
+    console.log(result.error.flatten());
     return result.error.flatten();
   } else {
     const hashedPassword = await bcrypt.hash(result.data.password, 12);
