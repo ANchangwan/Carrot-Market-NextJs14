@@ -15,6 +15,7 @@ const publicOnlyUrls: Routes = {
 export async function middleware(req: NextRequest) {
   const session = await getSession();
   const exists = publicOnlyUrls[req.nextUrl.pathname];
+
   if (!session.id) {
     if (!exists) {
       return NextResponse.redirect(new URL("/", req.url));
@@ -25,7 +26,3 @@ export async function middleware(req: NextRequest) {
     }
   }
 }
-
-export const config = {
-  matcher: ["/", "/profile", "/create-account"],
-};
