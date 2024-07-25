@@ -73,7 +73,7 @@ const formSchema = z
     message: "패스워드가 서로 다릅니다!!",
     path: ["confirmPassword"],
   })
-  .superRefine(async ({ username }, ctx) => {
+  .superRefine(async ({ username, }, ctx) => {
     const user = await db.user.findUnique({
       where: {
         username,
