@@ -1,27 +1,67 @@
-import { HomeIcon } from "@heroicons/react/24/solid";
+"use client";
+import {
+  NewspaperIcon as OutlineNewspaperIcon,
+  HomeIcon as OutlineHomeIcon,
+  ChatBubbleOvalLeftEllipsisIcon as OutlineChatIcon,
+  VideoCameraIcon as OutlineLiveIcon,
+  UserIcon as OutlineUserIcon,
+} from "@heroicons/react/24/outline";
+import {
+  NewspaperIcon as SolidNewspaperIcon,
+  HomeIcon as SolidHomeIcon,
+  ChatBubbleOvalLeftEllipsisIcon as SolidChatIcon,
+  VideoCameraIcon as SolidLiveIcon,
+  UserIcon as SolidUserIcon,
+} from "@heroicons/react/24/solid";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function TabBar() {
+  const pathname = usePathname();
   return (
-    <div>
-      <Link href="/products" className="">
-        <HomeIcon className="w-7 h-7" />
+    <div
+      className="fixed bottom-0 flex gap-6 grid grid-cols-5 w-full max-w-screen-md
+    border-neutral-600 border-t px-5 py-6 *:text-white
+    "
+    >
+      <Link href="/products" className="flex flex-col items-center gap-px">
+        {pathname === "/products" ? (
+          <SolidHomeIcon className="w-7 h-7" />
+        ) : (
+          <OutlineHomeIcon className="w-7 h-7" />
+        )}
         <span>홈</span>
       </Link>
-      <Link href="/life" className="">
-        <HomeIcon className="w-7 h-7" />
+      <Link href="/life" className="flex flex-col items-center gap-px">
+        {pathname === "/life" ? (
+          <SolidNewspaperIcon className="w-7 h-7" />
+        ) : (
+          <OutlineNewspaperIcon className="w-7 h-7" />
+        )}
         <span>동네생활</span>
       </Link>
-      <Link href="/chat" className="">
-        <HomeIcon className="w-7 h-7" />
+      <Link href="/chats" className="flex flex-col items-center gap-px">
+        {pathname === "/chat" ? (
+          <SolidChatIcon className="w-7 h-7" />
+        ) : (
+          <OutlineChatIcon className="w-7 h-7" />
+        )}
         <span>채팅</span>
       </Link>
-      <Link href="/live" className="">
-        <HomeIcon className="w-7 h-7" />
+      <Link href="/live" className="flex flex-col items-center gap-px">
+        {pathname === "/live" ? (
+          <SolidLiveIcon className="w-7 h-7" />
+        ) : (
+          <OutlineLiveIcon className="w-7 h-7" />
+        )}
         <span>쇼핑</span>
       </Link>
-      <Link href="/profile" className="">
-        <HomeIcon className="w-7 h-7" />
+      <Link href="/profile" className="flex flex-col items-center gap-px">
+        {pathname === "/profile" ? (
+          <SolidUserIcon className="w-7 h-7" />
+        ) : (
+          <OutlineUserIcon  className="w-7 h-7" />
+        )}
         <span>나의 당근</span>
       </Link>
     </div>
