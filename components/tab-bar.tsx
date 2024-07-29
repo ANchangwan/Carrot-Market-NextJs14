@@ -20,7 +20,7 @@ export default function TabBar() {
   const pathname = usePathname();
   return (
     <div
-      className="fixed bottom-0 flex gap-6 grid grid-cols-5 w-full max-w-screen-md
+      className="fixed bottom-0 gap-6 grid grid-cols-5 w-full max-w-screen-md
     border-neutral-600 border-t px-5 py-6 *:text-white
     "
     >
@@ -60,7 +60,7 @@ export default function TabBar() {
         {pathname === "/profile" ? (
           <SolidUserIcon className="w-7 h-7" />
         ) : (
-          <OutlineUserIcon  className="w-7 h-7" />
+          <OutlineUserIcon className="w-7 h-7" />
         )}
         <span>나의 당근</span>
       </Link>
