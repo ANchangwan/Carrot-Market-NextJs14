@@ -21,7 +21,7 @@ export default function TabBar() {
   return (
     <div
       className="fixed bottom-0 gap-6 grid grid-cols-5 w-full max-w-screen-md
-    border-neutral-600 border-t px-5 py-6 *:text-white
+    border-neutral-600 border-t px-5 py-6 *:text-white bg-neutral-800
     "
     >
       <Link href="/products" className="flex flex-col items-center gap-px">
