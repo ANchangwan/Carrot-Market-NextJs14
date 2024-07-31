@@ -6,15 +6,22 @@ import { useState } from "react";
 import { uploadProduct } from "./action";
 
 export default function AddProduct() {
+  const maxSize = 4 * 1024 * 1024;
   const [preview, setPreview] = useState("");
   const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
       target: { files },
     } = event;
-    if (!files) {
+
+    if (!files || files[0].size > maxSize) {
+      return;
+    }
+    if (!files[0].type.includes("image/")) {
+      alert("이미지 파일만 업로드 가능합니다.");
       return;
     }
     const file = files[0];
+
     const url = URL.createObjectURL(file);
     setPreview(url);
   };
