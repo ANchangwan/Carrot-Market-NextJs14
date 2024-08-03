@@ -13,14 +13,6 @@ export default function AddProduct() {
   const maxSize = 4 * 1024 * 1024;
   const [preview, setPreview] = useState("");
   const [state, action] = useFormState(uploadProduct, null);
-  const [file, setFile] = useState<File | null>(null);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<productType>({
-    resolver: zodResolver(productSchema),
-  });
 
   const onImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -39,7 +31,6 @@ export default function AddProduct() {
 
     const url = URL.createObjectURL(file);
     setPreview(url);
-    setFile(file);
   };
 
   return (
