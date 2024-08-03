@@ -11,7 +11,7 @@ export default function ModalButton() {
   return (
     <button
       onClick={onCloseClick}
-      className="absolute right-14 top-5 text-neutral-200"
+      className="absolute z-50 right-14 top-5 text-neutral-200"
     >
       <XMarkIcon className="size-10" />
     </button>
