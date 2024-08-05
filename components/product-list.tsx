@@ -1,8 +1,8 @@
 "use client";
-import { InitialProducts } from "@/app/(tabs)/home/page";
+import { InitialProducts } from "@/app/(tabs)/products/page";
 import ListProduct from "./list-product";
 import { useEffect, useRef, useState } from "react";
-import { getMoreProducts } from "@/app/(tabs)/home/actions";
+import { getMoreProducts } from "@/app/(tabs)/products/actions";
 
 interface ProductListProps {
   initialProducts: InitialProducts;
@@ -52,7 +52,7 @@ export default function ProductList({ initialProducts }: ProductListProps) {
         <ListProduct key={product.id} {...product} />
       ))}
 
-      {!isLastPage ? (
+      {/* {!isLastPage ? (
         <span
           ref={trigger}
           className="text-sm font-semibold bg-orange-500 rounded-md py-2 px-3 w-fit mx-auto
@@ -61,7 +61,7 @@ export default function ProductList({ initialProducts }: ProductListProps) {
         >
           {isLoading ? "로딩 중..." : "더 보기"}
         </span>
-      ) : null}
+      ) : null} */}
     </div>
   );
 }

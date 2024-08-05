@@ -32,6 +32,12 @@ async function getIsOwner(userId: number) {
   return false;
 }
 
+export async function generateMetadata({ params }: { params: { id: string } }) {
+  return {
+    title: `product!! ${params.id}`,
+  };
+}
+
 export default async function ProductDetail({
   params,
 }: {

@@ -9,6 +9,14 @@ async function getProduct(id: number) {
     where: {
       id,
     },
+    include: {
+      user: {
+        select: {
+          username: true,
+          avatar: true,
+        },
+      },
+    },
   });
   return product;
 }
@@ -22,8 +30,8 @@ export default async function Modal({ params }: { params: { id: string } }) {
     <div className="absolute bg-opacity-60 w-full h-full z-50 flex justify-center items-center bg-black left-0 top-0">
       <div className="max-w-screen-sm w-full h-1/2 flex justify-center">
         <ModalButton />
-        <div className="flex w-full">
-          <div className="relative aspect-square text-neutral-200 rounded-md flex justify-center items-center w-1/2">
+        <div className="flex max-w-screen-md">
+          <div className="relative aspect-square text-neutral-200 rounded-md flex justify-center items-center">
             {product ? (
               <Image fill src={product.photo} alt={product.title} />
             ) : (
@@ -33,7 +41,7 @@ export default async function Modal({ params }: { params: { id: string } }) {
 
           {product && (
             <div
-              className="w-1/2 p-4 flex flex-col justify-center gap-10 bg-neutral-500
+              className=" p-4 flex flex-col justify-center gap-10 bg-neutral-500
             px-5
             "
             >
