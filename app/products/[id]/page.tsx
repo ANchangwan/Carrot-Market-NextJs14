@@ -4,9 +4,19 @@ import { formatToWon } from "@/lib/utils";
 import { UserIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, usePathname } from "next/navigation";
+import {
+  unstable_cache as nextCache,
+  revalidatePath,
+  revalidateTag,
+} from "next/cache";
+
+const getCachedProduct = nextCache(getProduct, ["product-detail"], {
+  tags: ["product-detail", "xxxx"],
+});
 
 async function getProduct(id: number) {
+  console.log("product");
   const product = await db.product.findUnique({
     where: {
       id,
@@ -24,17 +34,36 @@ async function getProduct(id: number) {
   return product;
 }
 
+async function getProductTitle(id: number) {
+  console.log("title");
+  const product = await db.product.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      title: true,
+    },
+  });
+
+  return product;
+}
+
+const getCachedProductTitle = nextCache(getProductTitle, ["product-title"], {
+  tags: ["product-title", "xxxx"],
+});
+
 async function getIsOwner(userId: number) {
-  const session = await getSession();
-  if (session.id) {
-    return session.id === userId;
-  }
+  // const session = await getSession();
+  // if (session.id) {
+  //   return session.id === userId;
+  // }
   return false;
 }
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
+  const product = await getCachedProductTitle(Number(params.id));
   return {
-    title: `product!! ${params.id}`,
+    title: product?.title,
   };
 }
 
@@ -47,30 +76,33 @@ export default async function ProductDetail({
   if (isNaN(id)) {
     return notFound();
   }
-  const product = await getProduct(id);
+  const product = await getCachedProduct(id);
   if (!product) {
     return notFound();
   }
   const isOwner = await getIsOwner(product.userId);
+  const Revalidation = async () => {
+    "use server";
+    revalidateTag("xxxx");
+  };
   return (
-    <div>
-      <div className="relative overflow-hidden aspect-square">
+    <div className="pb-40">
+      <div className="relative aspect-square">
         <Image
           className="object-cover"
           fill
-          src={product.photo}
+          src={`${product.photo}`}
           alt={product.title}
         />
       </div>
-      <div className="p-5 flex items-center gap-5 border-b border-neutral-700">
-        <div className="size-10 rounded-full">
+      <div className="p-5 flex items-center gap-3 border-b border-neutral-700">
+        <div className="size-10 overflow-hidden rounded-full">
           {product.user.avatar !== null ? (
             <Image
-              className="rounded-full size-10 overflow-hidden"
               src={product.user.avatar}
-              alt={product.user.username}
               width={40}
-              height={50}
+              height={40}
+              alt={product.user.username}
             />
           ) : (
             <UserIcon />
@@ -84,33 +116,34 @@ export default async function ProductDetail({
         <h1 className="text-2xl font-semibold">{product.title}</h1>
         <p>{product.description}</p>
       </div>
-      <div
-        className="fixed w-full bottom-0 
-        left-0 p-5 pb-10 bg-neutral-800 
-        flex justify-between items-center
-        "
-      >
-        <span className="font-semibold text-lg">
+      <div className="fixed w-full bottom-0  p-5 pb-10 bg-neutral-800 flex justify-between items-center max-w-screen-sm">
+        <span className="font-semibold text-xl">
           {formatToWon(product.price)}원
         </span>
         {isOwner ? (
-          <button
-            className="bg-red-500 px-5 py-2.5 rounded-md text-white
-          font-semibold
-          "
-          >
-            삭제
-          </button>
+          <form action={Revalidation}>
+            <button className="bg-red-500 px-5 py-2.5 rounded-md text-white font-semibold">
+              Revalidate title cache
+            </button>
+          </form>
         ) : null}
-        <Link
-          className="bg-orange-500 px-5 py-2.5 rounded-md text-white
-          font-semibold
-          "
-          href={``}
-        >
-          채팅하기
-        </Link>
+        <form>
+          <button className="bg-orange-500 px-5 py-2.5 rounded-md text-white font-semibold">
+            채팅하기
+          </button>
+        </form>
       </div>
     </div>
   );
+}
+
+export async function generateStaticParams() {
+  const products = await db.product.findMany({
+    select: {
+      id: true,
+    },
+  });
+  return products.map((products) => {
+    id: products.id;
+  });
 }
