@@ -11,7 +11,6 @@ const getCachedProducts = nextCache(getInitialProducts, ["home-products"]);
 // unstable_cache(DB query function, keysparts)
 
 async function getInitialProducts() {
-  console.log("hits!!");
   const products = await db.product.findMany({
     select: {
       title: true,
@@ -48,11 +47,11 @@ export default async function Product() {
   return (
     <div>
       <ProductList initialProducts={initialProducts} />
-      <form action={Revalidation}>
+      {/* <form action={Revalidation}>
         <button className="bg-orange-500 text-white rounded-md px-4 py-1 ml-3">
           Revalidate
         </button>
-      </form>
+      </form> */}
       <Link
         href="/products/add"
         className="

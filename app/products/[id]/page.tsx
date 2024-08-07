@@ -87,7 +87,7 @@ export default async function ProductDetail({
   };
   return (
     <div className="pb-40">
-      <div className="relative aspect-square">
+      <div className="relative  aspect-square">
         <Image
           className="object-cover"
           fill
@@ -100,8 +100,8 @@ export default async function ProductDetail({
           {product.user.avatar !== null ? (
             <Image
               src={product.user.avatar}
-              width={40}
-              height={40}
+              width={30}
+              height={30}
               alt={product.user.username}
             />
           ) : (
