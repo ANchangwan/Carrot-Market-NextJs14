@@ -84,7 +84,7 @@ model Comment {
 
 model ChatRoom {
   id         String    @id @default(cuid())
-  user       User[]
+  users      User[]
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
   message    Message[]
