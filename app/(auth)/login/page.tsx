@@ -5,9 +5,11 @@ import SocialLogin from "@/components/social-login-btn";
 import { useFormState } from "react-dom";
 import { login } from "./action";
 import { PASSWORD_MIN_LEGTH } from "@/lib/constants";
+import { useActionState } from "react";
 
 export default function Login() {
   const [state, action] = useFormState(login, null);
+
   return (
     <div className="flex flex-col gap-5 py-8 px-6">
       <div className="flex flex-col gap-2 *:font-medium">
